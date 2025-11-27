@@ -15,3 +15,5 @@ orders/
 wellness_log.json
 
 leads_db.json
+
+fraud_db.sqlite
