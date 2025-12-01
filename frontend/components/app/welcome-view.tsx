@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/livekit/button';
 
 function WelcomeImage() {
@@ -20,16 +21,18 @@ function WelcomeImage() {
 
 interface WelcomeViewProps {
   startButtonText: string;
-  onStartCall: () => void;
+  onStartCall: (participantName: string) => void;
 }
 
 export const WelcomeView = ({
   startButtonText,
   onStartCall,
-  ref,
+  ...props
 }: React.ComponentProps<'div'> & WelcomeViewProps) => {
+  const [name, setName] = useState('');
+
   return (
-    <div ref={ref}>
+    <div {...props}>
       <section className="bg-background flex flex-col items-center justify-center text-center">
         <WelcomeImage />
 
@@ -37,9 +40,24 @@ export const WelcomeView = ({
           Chat live with your voice AI agent
         </p>
 
-        <Button variant="primary" size="lg" onClick={onStartCall} className="mt-6 w-64 font-mono">
-          {startButtonText}
-        </Button>
+        <div className="mt-6 w-64 space-y-2">
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          />
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => onStartCall(name)}
+            className="w-full font-mono"
+            disabled={!name.trim()}
+          >
+            {startButtonText}
+          </Button>
+        </div>
       </section>
 
       <div className="fixed bottom-5 left-0 flex w-full items-center justify-center">
